@@ -1,0 +1,2 @@
+# FullParametricEQ
+Zenei jelfeldolgozás NHF
