@@ -42,22 +42,53 @@ FullParametricEQAudioProcessorEditor::FullParametricEQAudioProcessorEditor (Full
     this->highshelfGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "highshelfGain", highshelfGainSlider));
 
 
-    //Peak1
-    addAndMakeVisible(peakCenterFrequencySlider);
-    this->peakCenterFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
-    this->peakCenterFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    this->peakCenterFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakCenterFrequency", peakCenterFrequencySlider));
+    //PeakL
+    addAndMakeVisible(peakLCenterFrequencySlider);
+    this->peakLCenterFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakLCenterFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakLCenterFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakLCenterFrequency", peakLCenterFrequencySlider));
 
-    addAndMakeVisible(peakGainSlider);
-    this->peakGainSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
-    this->peakGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    this->peakGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakGain", peakGainSlider));
+    addAndMakeVisible(peakLGainSlider);
+    this->peakLGainSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakLGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakLGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakLGain", peakLGainSlider));
 
-    addAndMakeVisible(peakBandwidthSlider);
-    this->peakBandwidthSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
-    this->peakBandwidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    this->peakBandwidthAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakBandwidth", peakBandwidthSlider));
+    addAndMakeVisible(peakLBandwidthSlider);
+    this->peakLBandwidthSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakLBandwidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakLBandwidthAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakLBandwidth", peakLBandwidthSlider));
 
+    //PeakM
+    addAndMakeVisible(peakMCenterFrequencySlider);
+    this->peakMCenterFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakMCenterFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakMCenterFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakMCenterFrequency", peakMCenterFrequencySlider));
+
+    addAndMakeVisible(peakMGainSlider);
+    this->peakMGainSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakMGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakMGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakMGain", peakMGainSlider));
+
+    addAndMakeVisible(peakMBandwidthSlider);
+    this->peakMBandwidthSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakMBandwidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakMBandwidthAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakMBandwidth", peakMBandwidthSlider));
+
+    //PeakH
+    addAndMakeVisible(peakHCenterFrequencySlider);
+    this->peakHCenterFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakHCenterFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakHCenterFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakHCenterFrequency", peakHCenterFrequencySlider));
+
+    addAndMakeVisible(peakHGainSlider);
+    this->peakHGainSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakHGainSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakHGainAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakHGain", peakHGainSlider));
+
+    addAndMakeVisible(peakHBandwidthSlider);
+    this->peakHBandwidthSlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    this->peakHBandwidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    this->peakHBandwidthAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakHBandwidth", peakHBandwidthSlider));
 
     
 
@@ -96,14 +127,29 @@ void FullParametricEQAudioProcessorEditor::resized()
     auto bounds = this->getLocalBounds();
     //auto responseArea = bounds.removeFromTop(bounds.getHeight() * 0.33);
 
-    auto lowshelfArea = bounds.removeFromLeft(bounds.getWidth() * 0.33);
+    auto lowshelfArea = bounds.removeFromLeft(bounds.getWidth() * 0.2);
     auto lowshelfFreqArea = lowshelfArea.removeFromTop(lowshelfArea.getHeight() * 0.5);
     auto lowshelfGainArea = lowshelfArea;
 
-    auto peakArea = bounds.removeFromLeft(bounds.getWidth() * 0.5);
-    auto peakFreqArea = peakArea.removeFromTop(peakArea.getHeight() * 0.33);
+    auto peakArea = bounds.removeFromLeft(bounds.getWidth() * 0.75);
+    auto peakLArea = peakArea.removeFromLeft(peakArea.getWidth() * 0.33);
+    auto peakLFreqArea = peakLArea.removeFromTop(peakLArea.getHeight() * 0.33);
+    auto peakLGainArea = peakLArea.removeFromTop(peakLArea.getHeight() * 0.5);
+    auto peakLBandwidthArea = peakLArea;
+
+    auto peakMArea = peakArea.removeFromLeft(peakArea.getWidth() * 0.5);
+    auto peakMFreqArea = peakMArea.removeFromTop(peakMArea.getHeight() * 0.33);
+    auto peakMGainArea = peakMArea.removeFromTop(peakMArea.getHeight() * 0.5);
+    auto peakMBandwidthArea = peakMArea;
+
+    auto peakHArea = peakArea;
+    auto peakHFreqArea = peakHArea.removeFromTop(peakHArea.getHeight() * 0.33);
+    auto peakHGainArea = peakHArea.removeFromTop(peakHArea.getHeight() * 0.5);
+    auto peakHBandwidthArea = peakHArea;
+    
+    /*auto peakFreqArea = peakArea.removeFromTop(peakArea.getHeight() * 0.33);
     auto peakGainArea = peakArea.removeFromTop(peakArea.getHeight() * 0.5);
-    auto peakBandwidthArea = peakArea;
+    auto peakBandwidthArea = peakArea;*/
 
     auto highshelfFreqArea = bounds.removeFromTop(bounds.getHeight() * 0.5);
     auto highshelfGainArea = bounds;
@@ -111,9 +157,17 @@ void FullParametricEQAudioProcessorEditor::resized()
     this->lowshelfCutoffFrequencySlider.setBounds(lowshelfFreqArea);
     this->lowshelfGainSlider.setBounds(lowshelfGainArea);
 
-    this->peakCenterFrequencySlider.setBounds(peakFreqArea);
-    this->peakGainSlider.setBounds(peakGainArea);
-    this->peakBandwidthSlider.setBounds(peakBandwidthArea);
+    this->peakLCenterFrequencySlider.setBounds(peakLFreqArea);
+    this->peakLGainSlider.setBounds(peakLGainArea);
+    this->peakLBandwidthSlider.setBounds(peakLBandwidthArea);
+
+    this->peakMCenterFrequencySlider.setBounds(peakMFreqArea);
+    this->peakMGainSlider.setBounds(peakMGainArea);
+    this->peakMBandwidthSlider.setBounds(peakMBandwidthArea);
+
+    this->peakHCenterFrequencySlider.setBounds(peakHFreqArea);
+    this->peakHGainSlider.setBounds(peakHGainArea);
+    this->peakHBandwidthSlider.setBounds(peakHBandwidthArea);
 
     this->highshelfCutoffFrequencySlider.setBounds(highshelfFreqArea);
     this->highshelfGainSlider.setBounds(highshelfGainArea);

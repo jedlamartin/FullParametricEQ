@@ -69,10 +69,20 @@ private:
     std::atomic<float>* highshelfCutoffFrequencyParameter = nullptr;
     std::atomic<float>* highshelfGainParameter = nullptr;
     
-    PeakFilter peakFilter;
-    std::atomic<float>* peakCenterFrequencyParameter = nullptr;
-    std::atomic<float>* peakGainParameter = nullptr;
-    std::atomic<float>* peakBandwidthParameter = nullptr;
+    PeakFilter peakFilterL;
+    std::atomic<float>* peakLCenterFrequencyParameter = nullptr;
+    std::atomic<float>* peakLGainParameter = nullptr;
+    std::atomic<float>* peakLBandwidthParameter = nullptr;
+
+    PeakFilter peakFilterM;
+    std::atomic<float>* peakMCenterFrequencyParameter = nullptr;
+    std::atomic<float>* peakMGainParameter = nullptr;
+    std::atomic<float>* peakMBandwidthParameter = nullptr;
+
+    PeakFilter peakFilterH;
+    std::atomic<float>* peakHCenterFrequencyParameter = nullptr;
+    std::atomic<float>* peakHGainParameter = nullptr;
+    std::atomic<float>* peakHBandwidthParameter = nullptr;
     
     
     //==============================================================================

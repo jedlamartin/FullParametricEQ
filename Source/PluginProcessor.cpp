@@ -30,10 +30,19 @@ parameters(*this, nullptr, juce::Identifier("FullParametricEQ"), {
     //Highself
     std::make_unique<juce::AudioParameterFloat>("highshelfCutoffFrequency","High Frequency",juce::NormalisableRange<float>(20.f, 20000.f, 1.f, 0.3f), 20000.f) ,
     std::make_unique<juce::AudioParameterFloat>("highshelfGain","High Frequency Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
-    //Peak1
-    std::make_unique<juce::AudioParameterFloat>("peakCenterFrequency","Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
-    std::make_unique<juce::AudioParameterFloat>("peakGain","Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
-    std::make_unique<juce::AudioParameterFloat>("peakBandwidth","Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f)
+    //PeakL
+    std::make_unique<juce::AudioParameterFloat>("peakLCenterFrequency","Low Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakLGain","Low Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakLBandwidth","Low Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f),
+    //PeakM
+    std::make_unique<juce::AudioParameterFloat>("peakMCenterFrequency","Mid Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakMGain","Mid Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakMBandwidth","Mid Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f),
+    //PeakH
+    std::make_unique<juce::AudioParameterFloat>("peakHCenterFrequency","High Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakHGain","High Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
+    std::make_unique<juce::AudioParameterFloat>("peakHBandwidth","High Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f)
+
     }), lowshelfFilter(low), highshelfFilter(high)
 {
     this->lowshelfCutoffFrequencyParameter = this->parameters.getRawParameterValue("lowshelfCutoffFrequency");
@@ -42,9 +51,18 @@ parameters(*this, nullptr, juce::Identifier("FullParametricEQ"), {
     this->highshelfCutoffFrequencyParameter = this->parameters.getRawParameterValue("highshelfCutoffFrequency");
     this->highshelfGainParameter = this->parameters.getRawParameterValue("highshelfGain");
 
-    this->peakCenterFrequencyParameter = this->parameters.getRawParameterValue("peakCenterFrequency");
-    this->peakGainParameter = this->parameters.getRawParameterValue("peakGain");
-    this->peakBandwidthParameter = this->parameters.getRawParameterValue("peakBandwidth");
+    this->peakLCenterFrequencyParameter = this->parameters.getRawParameterValue("peakLCenterFrequency");
+    this->peakLGainParameter = this->parameters.getRawParameterValue("peakLGain");
+    this->peakLBandwidthParameter = this->parameters.getRawParameterValue("peakLBandwidth");
+
+    this->peakMCenterFrequencyParameter = this->parameters.getRawParameterValue("peakMCenterFrequency");
+    this->peakMGainParameter = this->parameters.getRawParameterValue("peakMGain");
+    this->peakMBandwidthParameter = this->parameters.getRawParameterValue("peakMBandwidth");
+
+    this->peakHCenterFrequencyParameter = this->parameters.getRawParameterValue("peakHCenterFrequency");
+    this->peakHGainParameter = this->parameters.getRawParameterValue("peakHGain");
+    this->peakHBandwidthParameter = this->parameters.getRawParameterValue("peakHBandwidth");
+
 }
 
 FullParametricEQAudioProcessor::~FullParametricEQAudioProcessor()
@@ -118,7 +136,9 @@ void FullParametricEQAudioProcessor::prepareToPlay (double sampleRate, int sampl
 {
     this->lowshelfFilter.setSamplingRate(static_cast<float>(sampleRate));
     this->highshelfFilter.setSamplingRate(static_cast<float>(sampleRate));
-    this->peakFilter.setSamplingRate(static_cast<float>(sampleRate));
+    this->peakFilterL.setSamplingRate(static_cast<float>(sampleRate));
+    this->peakFilterM.setSamplingRate(static_cast<float>(sampleRate));
+    this->peakFilterH.setSamplingRate(static_cast<float>(sampleRate));
 }
 
 void FullParametricEQAudioProcessor::releaseResources()
@@ -184,15 +204,35 @@ void FullParametricEQAudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 
     this->highshelfFilter.processBlock(buffer, midiMessages);
 
-    //Peak1
-    const auto peakCenterFrequency = this->peakCenterFrequencyParameter->load();
-    const auto peakGain = this->peakGainParameter->load();
-    const auto peakBandwidth = this->peakBandwidthParameter->load();
-    this->peakFilter.setCenterFrequency(peakCenterFrequency);
-    this->peakFilter.setGain(peakGain);
-    this->peakFilter.setBandwidth(peakBandwidth);
+    //PeakL
+    const auto peakLCenterFrequency = this->peakLCenterFrequencyParameter->load();
+    const auto peakLGain = this->peakLGainParameter->load();
+    const auto peakLBandwidth = this->peakLBandwidthParameter->load();
+    this->peakFilterL.setCenterFrequency(peakLCenterFrequency);
+    this->peakFilterL.setGain(peakLGain);
+    this->peakFilterL.setBandwidth(peakLBandwidth);
 
-    this->peakFilter.processBlock(buffer, midiMessages);
+    this->peakFilterL.processBlock(buffer, midiMessages);
+
+    //PeakM
+    const auto peakMCenterFrequency = this->peakMCenterFrequencyParameter->load();
+    const auto peakMGain = this->peakMGainParameter->load();
+    const auto peakMBandwidth = this->peakMBandwidthParameter->load();
+    this->peakFilterM.setCenterFrequency(peakMCenterFrequency);
+    this->peakFilterM.setGain(peakMGain);
+    this->peakFilterM.setBandwidth(peakMBandwidth);
+
+    this->peakFilterM.processBlock(buffer, midiMessages);
+
+    //PeakH
+    const auto peakHCenterFrequency = this->peakHCenterFrequencyParameter->load();
+    const auto peakHGain = this->peakHGainParameter->load();
+    const auto peakHBandwidth = this->peakHBandwidthParameter->load();
+    this->peakFilterH.setCenterFrequency(peakHCenterFrequency);
+    this->peakFilterH.setGain(peakHGain);
+    this->peakFilterH.setBandwidth(peakHBandwidth);
+
+    this->peakFilterH.processBlock(buffer, midiMessages);
 }
 
 //==============================================================================

@@ -5,6 +5,10 @@
               companyName="zero" pluginFormats="buildStandalone,buildVST3">
   <MAINGROUP id="y5Qd94" name="FullParametricEQ">
     <GROUP id="{5B562000-D30F-A676-02D7-F42572449E95}" name="Source">
+      <FILE id="C7vhne" name="ShelfFilter.h" compile="0" resource="0" file="Source/ShelfFilter.h"/>
+      <FILE id="iuBpm1" name="ShelfFilter.cpp" compile="1" resource="0" file="Source/ShelfFilter.cpp"/>
+      <FILE id="tD8TcI" name="PeakFilter.h" compile="0" resource="0" file="Source/PeakFilter.h"/>
+      <FILE id="GhKTGH" name="PeakFilter.cpp" compile="1" resource="0" file="Source/PeakFilter.cpp"/>
       <FILE id="MkGkQ7" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="wpF6eq" name="PluginProcessor.h" compile="0" resource="0"

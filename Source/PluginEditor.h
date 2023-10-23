@@ -49,19 +49,44 @@ private:
     juce::Slider highshelfGainSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> highshelfGainAttachment;
 
-    //Peak1
-    juce::Label peakCenterFrequencyLabel;
-    juce::Slider peakCenterFrequencySlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakCenterFrequencyAttachment;
+    //PeakL
+    juce::Label peakLCenterFrequencyLabel;
+    juce::Slider peakLCenterFrequencySlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakLCenterFrequencyAttachment;
 
-    juce::Label peakGainLabel;
-    juce::Slider peakGainSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakGainAttachment;
+    juce::Label peakLGainLabel;
+    juce::Slider peakLGainSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakLGainAttachment;
     
-    juce::Label peakBandwidthLabel;
-    juce::Slider peakBandwidthSlider;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakBandwidthAttachment;
+    juce::Label peakLBandwidthLabel;
+    juce::Slider peakLBandwidthSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakLBandwidthAttachment;
 
-    
+    //PeakM
+    juce::Label peakMCenterFrequencyLabel;
+    juce::Slider peakMCenterFrequencySlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakMCenterFrequencyAttachment;
+
+    juce::Label peakMGainLabel;
+    juce::Slider peakMGainSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakMGainAttachment;
+
+    juce::Label peakMBandwidthLabel;
+    juce::Slider peakMBandwidthSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakMBandwidthAttachment;
+
+    //PeakH
+    juce::Label peakHCenterFrequencyLabel;
+    juce::Slider peakHCenterFrequencySlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakHCenterFrequencyAttachment;
+
+    juce::Label peakHGainLabel;
+    juce::Slider peakHGainSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakHGainAttachment;
+
+    juce::Label peakHBandwidthLabel;
+    juce::Slider peakHBandwidthSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakHBandwidthAttachment;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FullParametricEQAudioProcessorEditor)
 };

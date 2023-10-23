@@ -17,4 +17,3 @@ private:
 	float samplingRate;
 	std::vector<std::vector<float>> dnBuffer;
 };
-
