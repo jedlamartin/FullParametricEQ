@@ -14,6 +14,17 @@
 //==============================================================================
 /**
 */
+class RotarySliderWithLabels : public juce::LookAndFeel_V4{
+public:
+    //RotarySliderWithLabels(juce::String suffix) :suffix(suffix) {};
+
+    void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
+        const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override;
+
+private:
+    juce::String suffix;
+};
+
 class FullParametricEQAudioProcessorEditor  : public juce::AudioProcessorEditor
 {
 public:
@@ -23,6 +34,7 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void setupRotarySlider(juce::Slider& slider, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>& attachment, juce::String suffix);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -30,6 +42,8 @@ private:
     FullParametricEQAudioProcessor& audioProcessor;
 
     juce::AudioProcessorValueTreeState& valueTreeState;
+
+    RotarySliderWithLabels lookAndFeel;
 
     //Lowshelf
     juce::Label lowshelfCutoffFrequencyLabel;

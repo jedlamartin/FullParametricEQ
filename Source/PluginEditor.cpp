@@ -9,19 +9,24 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 FullParametricEQAudioProcessorEditor::FullParametricEQAudioProcessorEditor (FullParametricEQAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), audioProcessor (p), valueTreeState (vts)
 {
+    setLookAndFeel(&this->lookAndFeel);
+
     //Lowshelf
     //lowshelfCutoffFrequencyLabel.setText("Lowshelf Cutoff Frequency", juce::dontSendNotification);
     //addAndMakeVisible(lowshelfCutoffFrequencyLabel);
 
+    //setupRotarySlider(this->lowshelfCutoffFrequencySlider, this->lowshelfCutoffFrequencyAttachment, "dB");
     addAndMakeVisible(lowshelfCutoffFrequencySlider);
     this->lowshelfCutoffFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
     this->lowshelfCutoffFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     this->lowshelfCutoffFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "lowshelfCutoffFrequency", lowshelfCutoffFrequencySlider));
     
+
     //lowshelfGainLabel.setText("Gain", juce::dontSendNotification);
     //addAndMakeVisible(lowshelfGainLabel);
 
@@ -105,7 +110,10 @@ FullParametricEQAudioProcessorEditor::~FullParametricEQAudioProcessorEditor()
 void FullParametricEQAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+
+
+    g.fillAll(juce::Colour(0, 0, 0));
 
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
@@ -172,3 +180,51 @@ void FullParametricEQAudioProcessorEditor::resized()
     this->highshelfCutoffFrequencySlider.setBounds(highshelfFreqArea);
     this->highshelfGainSlider.setBounds(highshelfGainArea);
 }
+
+void FullParametricEQAudioProcessorEditor::setupRotarySlider(juce::Slider& slider, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>& attachment, juce::String suffix) {
+    addAndMakeVisible(slider);
+    slider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
+    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
+    attachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "lowshelfCutoffFrequency", lowshelfCutoffFrequencySlider));
+}
+
+void RotarySliderWithLabels::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) {
+    
+    //auto outline = juce::Colour(66,108,125);    
+    auto fill = juce::Colour(12, 219, 237);
+    //auto fill = juce::Colour(85, 196, 232);
+    auto outline = juce::Colour(57, 120, 125);
+
+    auto bounds = juce::Rectangle<int>(x, y, width, height).toFloat().reduced(15);
+
+    auto radius = juce::jmin(bounds.getWidth(), bounds.getHeight()) / 2.0f;
+    auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+    auto lineW = juce::jmin(8.0f, radius * 0.5f);
+    auto arcRadius = radius - lineW * 0.5f;
+    
+    //216.00002 503.999987
+
+    juce::Path backgroundArc;
+    backgroundArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius, arcRadius, 0.0f, rotaryStartAngle, rotaryEndAngle, true);
+    g.setColour(outline);
+    g.strokePath(backgroundArc, juce::PathStrokeType(5.f));
+
+    if (slider.isEnabled()) {
+        juce::Path valueArc;
+        valueArc.addCentredArc(bounds.getCentreX(), bounds.getCentreY(), arcRadius, arcRadius, 0.0f, rotaryStartAngle, toAngle, true);
+
+        g.setColour(fill);
+       // g.strokePath(valueArc, juce::PathStrokeType(lineW, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+        g.strokePath(valueArc, juce::PathStrokeType(5.f));
+    }
+    
+    juce::Path pointer;
+    pointer.addRectangle(bounds.getCentreX(), bounds.getCentreY()-radius/5*4+lineW, 2.f, -radius / 5);
+    pointer.applyTransform(juce::AffineTransform::rotation(toAngle, bounds.getCentreX(), bounds.getCentreY()));
+    //pointer.applyTransform(juce::AffineTransform::rotation(toAngle+(rotaryEndAngle-juce::float_Pi/2), bounds.getCentreX(), bounds.getCentreY()));
+    g.setColour(juce::Colours::white);
+    g.fillPath(pointer);
+}
+
+
+
