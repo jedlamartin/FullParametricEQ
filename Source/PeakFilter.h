@@ -15,5 +15,6 @@ private:
 	float gain;
 	float bandwidth;
 	float samplingRate;
+	//float quality;
 	std::vector<std::vector<float>> dnBuffer;
 };

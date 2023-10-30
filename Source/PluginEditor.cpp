@@ -12,16 +12,43 @@
 
 //==============================================================================
 FullParametricEQAudioProcessorEditor::FullParametricEQAudioProcessorEditor (FullParametricEQAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
-    : AudioProcessorEditor (&p), audioProcessor (p), valueTreeState (vts)
+    : AudioProcessorEditor (&p), audioProcessor (p), valueTreeState (vts), 
+    lowshelfCutoffFrequency(vts, juce::String("lowshelfCutoffFrequency"), juce::String("Hz")), 
+    lowshelfGain(vts, juce::String("lowshelfGain"), juce::String("dB")), 
+    highshelfCutoffFrequency(vts, juce::String("highshelfCutoffFrequency"), juce::String("Hz")),
+    highshelfGain(vts, juce::String("highshelfGain"), juce::String("dB")),
+    peakLCenterFrequency(vts, juce::String("peakLCenterFrequency"), juce::String("Hz")),
+    peakLGain(vts, juce::String("peakLGain"), juce::String("dB")),
+    peakLQuality(vts, juce::String("peakLBandwidth"), juce::String("")),
+    peakMCenterFrequency(vts, juce::String("peakMCenterFrequency"), juce::String("Hz")),
+    peakMGain(vts, juce::String("peakMGain"), juce::String("dB")),
+    peakMQuality(vts, juce::String("peakMBandwidth"), juce::String("")),
+    peakHCenterFrequency(vts, juce::String("peakHCenterFrequency"), juce::String("Hz")),
+    peakHGain(vts, juce::String("peakHGain"), juce::String("dB")),
+    peakHQuality(vts, juce::String("peakHBandwidth"), juce::String(""))
+
 {
-    setLookAndFeel(&this->lookAndFeel);
+    addAndMakeVisible(lowshelfCutoffFrequency);
+    addAndMakeVisible(lowshelfGain);
+    addAndMakeVisible(highshelfCutoffFrequency);
+    addAndMakeVisible(highshelfGain);
+    addAndMakeVisible(peakLCenterFrequency);
+    addAndMakeVisible(peakLGain);
+    addAndMakeVisible(peakLQuality);
+    addAndMakeVisible(peakMCenterFrequency);
+    addAndMakeVisible(peakMGain);
+    addAndMakeVisible(peakMQuality);
+    addAndMakeVisible(peakHCenterFrequency);
+    addAndMakeVisible(peakHGain);
+    addAndMakeVisible(peakHQuality);
+
+    //setLookAndFeel(&this->lookAndFeel);
 
     //Lowshelf
     //lowshelfCutoffFrequencyLabel.setText("Lowshelf Cutoff Frequency", juce::dontSendNotification);
     //addAndMakeVisible(lowshelfCutoffFrequencyLabel);
 
-    //setupRotarySlider(this->lowshelfCutoffFrequencySlider, this->lowshelfCutoffFrequencyAttachment, "dB");
-    addAndMakeVisible(lowshelfCutoffFrequencySlider);
+    /*addAndMakeVisible(lowshelfCutoffFrequencySlider);
     this->lowshelfCutoffFrequencySlider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
     this->lowshelfCutoffFrequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     this->lowshelfCutoffFrequencyAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "lowshelfCutoffFrequency", lowshelfCutoffFrequencySlider));
@@ -95,15 +122,15 @@ FullParametricEQAudioProcessorEditor::FullParametricEQAudioProcessorEditor (Full
     this->peakHBandwidthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
     this->peakHBandwidthAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "peakHBandwidth", peakHBandwidthSlider));
 
-    
+    */
 
     //setSize(paramSliderWidth + paramLabelWidth, juce::jmax(100, paramControlHeight * 2));
 
     setSize (600, 400);
 }
 
-FullParametricEQAudioProcessorEditor::~FullParametricEQAudioProcessorEditor()
-{
+FullParametricEQAudioProcessorEditor::~FullParametricEQAudioProcessorEditor(){
+    this->setLookAndFeel(nullptr);
 }
 
 //==============================================================================
@@ -162,7 +189,24 @@ void FullParametricEQAudioProcessorEditor::resized()
     auto highshelfFreqArea = bounds.removeFromTop(bounds.getHeight() * 0.5);
     auto highshelfGainArea = bounds;
 
-    this->lowshelfCutoffFrequencySlider.setBounds(lowshelfFreqArea);
+    this->lowshelfCutoffFrequency.setBounds(lowshelfFreqArea);
+    this->lowshelfGain.setBounds(lowshelfGainArea);
+
+    this->peakLCenterFrequency.setBounds(peakLFreqArea);
+    this->peakLGain.setBounds(peakLGainArea);
+    this->peakLQuality.setBounds(peakLBandwidthArea);
+
+    this->peakMCenterFrequency.setBounds(peakMFreqArea);
+    this->peakMGain.setBounds(peakMGainArea);
+    this->peakMQuality.setBounds(peakMBandwidthArea);
+
+    this->peakHCenterFrequency.setBounds(peakHFreqArea);
+    this->peakHGain.setBounds(peakHGainArea);
+    this->peakHQuality.setBounds(peakHBandwidthArea);
+
+    this->highshelfCutoffFrequency.setBounds(highshelfFreqArea);
+    this->highshelfGain.setBounds(highshelfGainArea);
+    /*this->lowshelfCutoffFrequencySlider.setBounds(lowshelfFreqArea);
     this->lowshelfGainSlider.setBounds(lowshelfGainArea);
 
     this->peakLCenterFrequencySlider.setBounds(peakLFreqArea);
@@ -178,17 +222,10 @@ void FullParametricEQAudioProcessorEditor::resized()
     this->peakHBandwidthSlider.setBounds(peakHBandwidthArea);
 
     this->highshelfCutoffFrequencySlider.setBounds(highshelfFreqArea);
-    this->highshelfGainSlider.setBounds(highshelfGainArea);
+    this->highshelfGainSlider.setBounds(highshelfGainArea);*/
 }
 
-void FullParametricEQAudioProcessorEditor::setupRotarySlider(juce::Slider& slider, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>& attachment, juce::String suffix) {
-    addAndMakeVisible(slider);
-    slider.setSliderStyle(juce::Slider::RotaryHorizontalDrag);
-    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 100, 30);
-    attachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(valueTreeState, "lowshelfCutoffFrequency", lowshelfCutoffFrequencySlider));
-}
-
-void RotarySliderWithLabels::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) {
+void LookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos, const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider& slider) {
     
     //auto outline = juce::Colour(66,108,125);    
     auto fill = juce::Colour(12, 219, 237);
@@ -226,5 +263,23 @@ void RotarySliderWithLabels::drawRotarySlider(juce::Graphics& g, int x, int y, i
     g.fillPath(pointer);
 }
 
+RotarySliderWithLabels::RotarySliderWithLabels(juce::AudioProcessorValueTreeState& vts, juce::String& paramID, juce::String& suffix) :juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalDrag, NoTextBox), suffix(suffix) {
+    this->param.reset(new juce::AudioProcessorValueTreeState::SliderAttachment(vts, paramID, *this));
+    setLookAndFeel(&lookAndFeel);
+}
+
+void RotarySliderWithLabels::paint(juce::Graphics& g) {
+    auto startAngle = juce::degreesToRadians(180.f + 45.f);
+    auto endAngle = juce::degreesToRadians(180.f - 45.f) + 2 * juce::float_Pi;
+    auto range = this->getRange();
+
+    g.setColour(juce::Colours::red);
+    g.drawRect(getLocalBounds());
+
+
+
+
+    this->lookAndFeel.drawRotarySlider(g, this->getLocalBounds().getX(), this->getLocalBounds().getY(), this->getLocalBounds().getWidth(), this->getLocalBounds().getHeight(), juce::jmap(this->getValue(), this->getRange().getStart(), this->getRange().getEnd(), 0.0, 1.0), startAngle, endAngle, *this);
+}
 
 

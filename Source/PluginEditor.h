@@ -14,7 +14,7 @@
 //==============================================================================
 /**
 */
-class RotarySliderWithLabels : public juce::LookAndFeel_V4{
+class LookAndFeel : public juce::LookAndFeel_V4{
 public:
     //RotarySliderWithLabels(juce::String suffix) :suffix(suffix) {};
 
@@ -23,6 +23,26 @@ public:
 
 private:
     juce::String suffix;
+};
+
+class RotarySliderWithLabels : public juce::Slider {
+public:
+    RotarySliderWithLabels(juce::AudioProcessorValueTreeState& vts, juce::String& paramID, juce::String& suffix);
+
+    ~RotarySliderWithLabels() {
+        setLookAndFeel(nullptr);
+    }
+
+    void paint(juce::Graphics& g) override;
+
+    int getStringHeight() const;
+    juce::String getDisplayText() const;
+
+
+private:
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> param;
+    juce::String suffix;
+    LookAndFeel lookAndFeel;
 };
 
 class FullParametricEQAudioProcessorEditor  : public juce::AudioProcessorEditor
@@ -34,7 +54,6 @@ public:
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
-    void setupRotarySlider(juce::Slider& slider, std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>& attachment, juce::String suffix);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -43,9 +62,12 @@ private:
 
     juce::AudioProcessorValueTreeState& valueTreeState;
 
-    RotarySliderWithLabels lookAndFeel;
+    LookAndFeel lookAndFeel;
 
-    //Lowshelf
+    RotarySliderWithLabels lowshelfCutoffFrequency, lowshelfGain, highshelfCutoffFrequency, highshelfGain, peakLCenterFrequency, peakLGain, peakLQuality, peakMCenterFrequency, peakMGain, peakMQuality, peakHCenterFrequency, peakHGain, peakHQuality;
+
+
+    /*//Lowshelf
     juce::Label lowshelfCutoffFrequencyLabel;
     juce::Slider lowshelfCutoffFrequencySlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lowshelfCutoffFrequencyAttachment;
@@ -101,6 +123,6 @@ private:
     juce::Label peakHBandwidthLabel;
     juce::Slider peakHBandwidthSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> peakHBandwidthAttachment;
-
+    */
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FullParametricEQAudioProcessorEditor)
 };
