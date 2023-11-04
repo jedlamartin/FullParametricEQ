@@ -1,4 +1,4 @@
-/*
+﻿/*
   ==============================================================================
 
     This file contains the basic framework code for a JUCE plugin editor.
@@ -16,33 +16,36 @@
 */
 class LookAndFeel : public juce::LookAndFeel_V4{
 public:
-    //RotarySliderWithLabels(juce::String suffix) :suffix(suffix) {};
 
     void drawRotarySlider(juce::Graphics& g, int x, int y, int width, int height, float sliderPos,
         const float rotaryStartAngle, const float rotaryEndAngle, juce::Slider&) override;
 
-private:
-    juce::String suffix;
+
 };
 
 class RotarySliderWithLabels : public juce::Slider {
 public:
-    RotarySliderWithLabels(juce::AudioProcessorValueTreeState& vts, juce::String& paramID, juce::String& suffix);
+    RotarySliderWithLabels(juce::RangedAudioParameter& param, juce::String& labelName, juce::String& labelText, juce::String& suffix);
 
     ~RotarySliderWithLabels() {
         setLookAndFeel(nullptr);
+        delete label;
     }
 
     void paint(juce::Graphics& g) override;
 
-    int getStringHeight() const;
+    int getStringHeight() const { return 15; };
     juce::String getDisplayText() const;
+    juce::String getLabelText() const;
+
 
 
 private:
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> param;
+    juce::RangedAudioParameter* param;
     juce::String suffix;
+    juce::Label* label;
     LookAndFeel lookAndFeel;
+    //külön implementálni az attachmenteket a main classba, és a constr-ba beadni őket
 };
 
 class FullParametricEQAudioProcessorEditor  : public juce::AudioProcessorEditor
@@ -65,7 +68,9 @@ private:
     LookAndFeel lookAndFeel;
 
     RotarySliderWithLabels lowshelfCutoffFrequency, lowshelfGain, highshelfCutoffFrequency, highshelfGain, peakLCenterFrequency, peakLGain, peakLQuality, peakMCenterFrequency, peakMGain, peakMQuality, peakHCenterFrequency, peakHGain, peakHQuality;
+    juce::Label *lowshelfLabel, *peakLabel, *highshelfLabel;
 
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> lowshelfCutoffFrequencyAttachment, lowshelfGainAttachment, highshelfCutoffFrequencyAttachment, highshelfGainAttachment, peakLCenterFrequencyAttachment, peakLGainAttachment, peakLQualityAttachment, peakMCenterFrequencyAttachment, peakMGainAttachment, peakMQualityAttachment, peakHCenterFrequencyAttachment, peakHGainAttachment, peakHQualityAttachment;
 
     /*//Lowshelf
     juce::Label lowshelfCutoffFrequencyLabel;

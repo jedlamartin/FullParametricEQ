@@ -13,8 +13,7 @@ public:
 private:
 	float centerFrequency;
 	float gain;
-	float bandwidth;
+	float quality;
 	float samplingRate;
-	//float quality;
 	std::vector<std::vector<float>> dnBuffer;
 };

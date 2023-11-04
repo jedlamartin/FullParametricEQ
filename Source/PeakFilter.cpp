@@ -8,8 +8,8 @@ void PeakFilter::setGain(float gain) {
 	this->gain = gain;
 }
 
-void PeakFilter::setBandwidth(float bandwidth) {
-	this->bandwidth = bandwidth;
+void PeakFilter::setBandwidth(float quality) {
+	this->quality = quality;
 }
 
 void PeakFilter::setSamplingRate(float samplingRate) {
@@ -19,8 +19,8 @@ void PeakFilter::setSamplingRate(float samplingRate) {
 void PeakFilter::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer&) {
 	constexpr float PI = 3.14159265359f;
 	dnBuffer.resize(buffer.getNumChannels());
-	//float bandwidth = this->centerFrequency / this->bandwidth;
-	auto tan = std::tan(PI * this->bandwidth / this->samplingRate);
+	float bandwidth = this->centerFrequency / this->quality;
+	auto tan = std::tan(PI * bandwidth / this->samplingRate);
 	auto c = (tan - 1) / (tan + 1);
 	auto d = -std::cos(2 * PI * this->centerFrequency / this->samplingRate);
 

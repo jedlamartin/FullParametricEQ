@@ -33,15 +33,15 @@ parameters(*this, nullptr, juce::Identifier("FullParametricEQ"), {
     //PeakL
     std::make_unique<juce::AudioParameterFloat>("peakLCenterFrequency","Low Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
     std::make_unique<juce::AudioParameterFloat>("peakLGain","Low Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
-    std::make_unique<juce::AudioParameterFloat>("peakLBandwidth","Low Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f),
+    std::make_unique<juce::AudioParameterFloat>("peakLQuality","Low Peak Quality",juce::NormalisableRange<float>(0.1f, 10.f, 0.05f, 1.f),1.f),
     //PeakM
     std::make_unique<juce::AudioParameterFloat>("peakMCenterFrequency","Mid Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
     std::make_unique<juce::AudioParameterFloat>("peakMGain","Mid Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
-    std::make_unique<juce::AudioParameterFloat>("peakMBandwidth","Mid Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f),
+    std::make_unique<juce::AudioParameterFloat>("peakMQuality","Mid Peak Quality",juce::NormalisableRange<float>(0.1f, 10.f, 0.05f, 1.f),1.f),
     //PeakH
     std::make_unique<juce::AudioParameterFloat>("peakHCenterFrequency","High Peak Center Frequency",juce::NormalisableRange<float>(20.f,20000.f,1.f, 0.3f),2000.f) ,
     std::make_unique<juce::AudioParameterFloat>("peakHGain","High Peak Gain",juce::NormalisableRange<float>(-20.f,20.f,0.1f,1.f),0.f) ,
-    std::make_unique<juce::AudioParameterFloat>("peakHBandwidth","High Peak Bandwidth",juce::NormalisableRange<float>(1.f,19980.f,1.f,0.3f),2000.f)
+    std::make_unique<juce::AudioParameterFloat>("peakHQuality","High Peak Quality",juce::NormalisableRange<float>(0.1f, 10.f, 0.05f, 1.f),1.f)
 
     }), lowshelfFilter(low), highshelfFilter(high)
 {
@@ -53,15 +53,15 @@ parameters(*this, nullptr, juce::Identifier("FullParametricEQ"), {
 
     this->peakLCenterFrequencyParameter = this->parameters.getRawParameterValue("peakLCenterFrequency");
     this->peakLGainParameter = this->parameters.getRawParameterValue("peakLGain");
-    this->peakLBandwidthParameter = this->parameters.getRawParameterValue("peakLBandwidth");
+    this->peakLBandwidthParameter = this->parameters.getRawParameterValue("peakLQuality");
 
     this->peakMCenterFrequencyParameter = this->parameters.getRawParameterValue("peakMCenterFrequency");
     this->peakMGainParameter = this->parameters.getRawParameterValue("peakMGain");
-    this->peakMBandwidthParameter = this->parameters.getRawParameterValue("peakMBandwidth");
+    this->peakMBandwidthParameter = this->parameters.getRawParameterValue("peakMQuality");
 
     this->peakHCenterFrequencyParameter = this->parameters.getRawParameterValue("peakHCenterFrequency");
     this->peakHGainParameter = this->parameters.getRawParameterValue("peakHGain");
-    this->peakHBandwidthParameter = this->parameters.getRawParameterValue("peakHBandwidth");
+    this->peakHBandwidthParameter = this->parameters.getRawParameterValue("peakHQuality");
 
 }
 
