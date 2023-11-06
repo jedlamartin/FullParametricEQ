@@ -328,8 +328,7 @@ void LookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, i
 
 
 RotarySliderWithLabels::RotarySliderWithLabels(juce::RangedAudioParameter& param, juce::String& labelName, juce::String& labelText, juce::String& suffix) :juce::Slider(juce::Slider::SliderStyle::RotaryHorizontalDrag, NoTextBox), param(&param), label(new juce::Label(labelName, labelText)), suffix(suffix) {
-    this->setTextValueSuffix(" " + this->suffix);
-    //this->label.setFont(juce::Font::)
+    //this->setTextValueSuffix(" " + this->suffix);
     setLookAndFeel(&lookAndFeel);
 }
 
@@ -340,7 +339,6 @@ void RotarySliderWithLabels::paint(juce::Graphics& g) {
 
 
 
-    //auto labelBounds=juce::Rectangle<int>
 
     g.setColour(juce::Colours::red);
     //g.drawRect(getLocalBounds());
@@ -352,7 +350,34 @@ void RotarySliderWithLabels::paint(juce::Graphics& g) {
 }
 
 juce::String RotarySliderWithLabels::getDisplayText() const {
-    return juce::String(this->getValue()) + juce::String(" ") + juce::String(this->suffix);
+
+    //return juce::String(this->getValue()) + juce::String(" ") + juce::String(this->suffix);
+
+    juce::String str;
+    bool addK = 0;
+
+    if (auto* param = dynamic_cast<juce::AudioParameterFloat*>(this->param)) {
+        float value = this->getValue();
+        if (value > 999.f) {
+            value = value / 1000.f;
+            addK = true;
+        }
+        str = juce::String(value, addK ? 2 : 0);
+    }
+    else {
+        jassertfalse;
+    }
+
+    if (this->suffix.isNotEmpty()) {
+        str << " ";
+            
+        if (addK)
+            str << "k";
+
+        str<< this->suffix;
+    }
+
+    return str;
 }
 
 juce::String RotarySliderWithLabels::getLabelText() const {
